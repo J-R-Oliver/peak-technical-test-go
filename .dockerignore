@@ -1,0 +1,9 @@
+# Default ignore everything
+*
+
+# Add files or folders starting with !
+!cmd
+!internal
+!pkg
+!go.mod
+!go.sum
