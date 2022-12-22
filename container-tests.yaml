@@ -1,0 +1,36 @@
+schemaVersion: 2.0.0
+
+metadataTest:
+  env:
+    - key: PORT
+      value: 8080
+  labels:
+    - key: org.opencontainers.image.title
+      value: peak-technical-test-go
+    - key: org.opencontainers.image.description
+      value: Micro-service that powers the shopping cart of an e-commerce website written in Go.
+    - key: org.opencontainers.image.authors
+      value: James Oliver
+    - key: org.opencontainers.image.source
+      value: https://github.com/J-R-Oliver/peak-technical-test-go
+    - key: org.opencontainers.image.licenses
+      value: Unlicense
+    - key: org.opencontainers.image.revision
+      value: ^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+      isRegex: true
+    - key: org.opencontainers.image.created
+      value: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+      isRegex: true
+  exposedPorts: ["8080"]
+  cmd: ["/app/peak-technical-test-go"]
+  workdir: "/app"
+  user: "nonroot:nonroot"
+
+fileExistenceTests:
+  - name: 'Go executable'
+    path: '/app/peak-technical-test-go'
+    shouldExist: true
+    permissions: '-r-x------'
+    uid: 65532
+    gid: 65532
+    isExecutableBy: 'owner'
