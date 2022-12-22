@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  peak-technical-test-go:
+    image: ${GITHUB_IMAGE:-peak-technical-test-go:local}
+    build:
+      context: .
+    container_name: peak-technical-test-go
+    depends_on:
+      postgres:
+        condition: service_started
+    ports:
+      - ${PORT}:${PORT}
+
+  postgres:
+    image: postgres:15.1
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+  component-tests:
+    image: golang:1.19.4
+    container_name: component-tests
+    depends_on:
+      peak-technical-test-go:
+        condition: service_healthy
+    working_dir: /src
+    command: go test -v -tags=component ./component-tests
+    environment:
+      BASE_URL: http://peak-technical-test-go:${PORT}
+    volumes:
+      - ./:/src
